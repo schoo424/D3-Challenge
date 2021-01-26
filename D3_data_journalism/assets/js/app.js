@@ -91,7 +91,7 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
     .attr("cx", d => xLinearScale(d.smokes))
     .attr("cy", d => yLinearScale(d.income))
     .attr("r", "10")
-    .attr("fill", "gold")
+    .attr("fill", "red")
     .attr("stroke-width", "1")
     .attr("stroke", "black");
 
@@ -130,9 +130,14 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
           
 // })
 // chartGroup.call(toolTip)
+
 // circlesGroup.on("mouseover", function(d) {
 //   toolTip.show(d,this)
 
 // }).on("mouseout",function(d){
 //   toolTip.hide(d)
-// })
+// });
+// }
+// , function(error) {
+//   console.log(error);
+// });
