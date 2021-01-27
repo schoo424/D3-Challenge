@@ -2,34 +2,6 @@
 
 //initial setup work
 
-var svgArea = d3.select("body").select("svg");
-
-// SVG wrapper dimensions are determined by the current width and
-// height of the browser window.
-var svgWidth = window.innerWidth;
-var svgHeight = window.innerHeight;
-
-var margin = {
-  top: 50,
-  bottom: 50,
-  right: 50,
-  left: 50
-};
-
-var height = svgHeight - margin.top - margin.bottom;
-var width = svgWidth - margin.left - margin.right;
-
-// Append SVG element
-var svg = d3
-  .select(".chart")
-  .append("svg")
-  .attr("height", svgHeight)
-  .attr("width", svgWidth);
-
-// Append group element
-var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
 // Read CSV
 d3.csv("assets/data/data.csv").then(function (journalismData) {
     console.log(journalismData);
@@ -49,6 +21,35 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
            
 });
 
+var svgArea = d3.select("body").select("svg");
+
+// SVG wrapper dimensions are determined by the current width and
+// height of the browser window.
+var svgWidth = window.innerWidth;
+var svgHeight = window.innerHeight;
+
+var margin = {
+  top: 100,
+  bottom: 250,
+  right: 250,
+  left: 250
+};
+
+var height = svgHeight - margin.top - margin.bottom;
+var width = svgWidth - margin.left - margin.right;
+
+// Append SVG element
+var svg = d3
+  .select(".chart")
+  .append("svg")
+  .attr("height", svgHeight)
+  .attr("width", svgWidth);
+
+// Append group element
+var chartGroup = svg.append("g")
+  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+// var chosenXAxis = "smokes";
 
   // create scales
   var xLinearScale = d3.scaleLinear()
@@ -62,6 +63,7 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
   // create axes
   var xAxis = d3.axisBottom(xLinearScale);
   var yAxis = d3.axisLeft(yLinearScale);
+  
 
   // append axes
   chartGroup.append("g")
@@ -70,6 +72,28 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
 
   chartGroup.append("g")
     .call(yAxis);
+
+  //append y-axis  
+    chartGroup.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - (height/2))
+    .attr("dy", "10em")
+    .classed("axis-text", true)
+    .text("Income");
+
+  // Create group for  2 x- axis labels
+  var labelsGroup = chartGroup.append("g")
+  .attr("transform", `translate(${width / 2}, ${height + 20})`);
+
+  // Create group for  2 x- axis labels
+  var smokesLabel = labelsGroup.append("text")
+  .attr("x", 0)
+  .attr("y", 20)
+  .attr("value", "smokes") 
+  .classed("active", true)
+  .text("Smokers (%)");
+
 
 //   // line generator
 //   var line = d3.line()
@@ -88,13 +112,27 @@ d3.csv("assets/data/data.csv").then(function (journalismData) {
     .data(journalismData)
     .enter()
     .append("circle")
+    .attr("class", "stateCircle")
     .attr("cx", d => xLinearScale(d.smokes))
     .attr("cy", d => yLinearScale(d.income))
-    .attr("r", "10")
-    .attr("fill", "red")
+    .attr("r", "15")
+    .attr("fill", "rgb(12,240,233)")
     .attr("stroke-width", "1")
-    .attr("stroke", "black");
-
+    .attr("stroke", "black")
+  
+  var circlesText = chartGroup.selectAll("g")
+    .data(journalismData)
+    .enter()
+    .append("text")
+    .attr("class", "stateText")
+    // .attr("font-color", "black")    
+    .attr("dx", d => xLinearScale(d.smokes-.15))  
+    .attr("dy", d => yLinearScale(d.income-500))
+    // .attr("opacity", "100")
+    .text(function(d){
+      return d.abbr
+    });  
+  
   // date formatter to display dates nicely
 //   var dateFormatter = d3.timeFormat("%d-%b");
 
