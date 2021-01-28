@@ -107,6 +107,20 @@ var chartGroup = svg.append("g")
 //     .attr("fill", "none")
 //     .attr("stroke", "red");
 
+  //fill in the circles with state abbreviations
+  var circlesText = chartGroup.selectAll(null)
+    .data(journalismData)
+    .enter()
+    .append("text")
+    .attr("class", "stateText")
+    // .attr("font-color", "black")    
+    .attr("dx", d => xLinearScale(d.smokes-.15))  
+    .attr("dy", d => yLinearScale(d.income-500))
+    // .attr("opacity", "100")
+    .text(function(d){
+      return d.abbr;   
+    
+    });  
   // append circles
   var circlesGroup = chartGroup.selectAll("circle")
     .data(journalismData)
@@ -119,21 +133,13 @@ var chartGroup = svg.append("g")
     .attr("fill", "rgb(12,240,233)")
     .attr("stroke-width", "1")
     .attr("stroke", "black")
+    .attr("opacity", ".5")
   
-  var circlesText = chartGroup.selectAll("g")
-    .data(journalismData)
-    .enter()
-    .append("text")
-    .attr("class", "stateText")
-    // .attr("font-color", "black")    
-    .attr("dx", d => xLinearScale(d.smokes-.15))  
-    .attr("dy", d => yLinearScale(d.income-500))
-    // .attr("opacity", "100")
-    .text(function(d){
-      return d.abbr
-    });  
+// console.log(journalismData);    
+
+// circlesGroup.append("text").text(d => d.abbr)
   
-  // date formatter to display dates nicely
+// date formatter to display dates nicely
 //   var dateFormatter = d3.timeFormat("%d-%b");
 
   // Step 1: Append tooltip div
